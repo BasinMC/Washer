@@ -22,9 +22,9 @@ import javax.inject.Provider;
  * consistency:
  *
  * <pre>
- *   _____ Root Context ____
- * /            |           \
- * |            |           |
+ *      _____ Root Context ____
+ *    /            |           \
+ *    |            |           |
  * Child A      Child B     Child C
  * </pre>
  *
@@ -42,6 +42,25 @@ import javax.inject.Provider;
 public interface Context {
 
     /**
+     * Binds a supertype to a specific implementation using the default generated qualifier.
+     *
+     * @param base    a base type such as an abstract class or interface.
+     * @param binding an implementation type to bind to.
+     */
+    default <C> void bind(@Nonnull Class<? super C> base, @Nonnull Class<C> binding) {
+        this.bind(base, this.getDefaultQualifier(base), binding);
+    }
+
+    /**
+     * Binds a super type and qualifier to a specific implementation.
+     *
+     * @param base      a base type such as an abstract class or interface.
+     * @param qualifier a qualifier.
+     * @param binding   an implementation type to bind to.
+     */
+    <C> void bind(@Nonnull Class<? super C> base, @Nonnull String qualifier, @Nonnull Class<C> binding);
+
+    /**
      * Checks whether the context or one of its parents can produce an instance of a certain type
      * (either through a provider or by invoking its constructor).
      *
@@ -49,7 +68,7 @@ public interface Context {
      * @return true if an instance can be produced, false otherwise.
      */
     default boolean canProduceInstance(@Nonnull Class<?> type) {
-        return this.canProduceInstanceLocally(type) || this.getParent().map((c) -> c.canProduceInstance(type)).orElse(false);
+        return this.canProduceInstance(type, this.getDefaultQualifier(type));
     }
 
     /**
@@ -72,7 +91,9 @@ public interface Context {
      * @param type a type.
      * @return true if an instance can be produced locally, false otherwise.
      */
-    boolean canProduceInstanceLocally(@Nonnull Class<?> type);
+    default boolean canProduceInstanceLocally(@Nonnull Class<?> type) {
+        return this.canProduceInstanceLocally(type, this.getDefaultQualifier(type));
+    }
 
     /**
      * Checks whether the context can produce an instance of a certain type locally (e.g. a provider
@@ -86,13 +107,56 @@ public interface Context {
     boolean canProduceInstanceLocally(@Nonnull Class<?> type, @Nonnull String qualifier);
 
     /**
+     * Clears all bindings for a certain base type.
+     *
+     * @param base a base type such as an abstract class or interface.
+     */
+    void clearAllBindings(@Nonnull Class<?> base);
+
+    /**
+     * Clears the default binding (attributed to the generated qualifier).
+     *
+     * @param base a base type such as an abstract class or interface.
+     */
+    default void clearBinding(@Nonnull Class<?> base) {
+        this.clearBinding(base, this.getDefaultQualifier(base));
+    }
+
+    /**
+     * Clears all bindings which match the specified filter predicate.
+     *
+     * @param base            a base type such as an abstract class or interface.
+     * @param filterPredicate a filter predicate which accepts a bound implementation type.
+     */
+    <C> void clearBinding(@Nonnull Class<C> base, @Nonnull Predicate<Class<? extends C>> filterPredicate);
+
+    /**
+     * Clears all bindings which match the specified filter predicate.
+     *
+     * @param base            a base type such as an abstract class or interface.
+     * @param filterPredicate a filter predicate which accepts a qualifier and a bound
+     *                        implementation type.
+     */
+    <C> void clearBinding(@Nonnull Class<C> base, @Nonnull BiPredicate<String, Class<? extends C>> filterPredicate);
+
+    /**
+     * Clears a binding for a certain type and qualifier.
+     *
+     * @param base      a base type such as an abstract class or interface.
+     * @param qualifier a qualifier.
+     */
+    void clearBinding(@Nonnull Class<?> base, @Nonnull String qualifier);
+
+    /**
      * Retrieves an instance of a certain type from the context.
      *
      * @param type a type.
      * @return an instance or, if no such component could be located, an empty optional.
      */
     @Nonnull
-    <T> Optional<T> get(@Nonnull Class<T> type);
+    default <T> Optional<T> get(@Nonnull Class<T> type) {
+        return this.get(type, this.getDefaultQualifier(type));
+    }
 
     /**
      * Retrieves an instance with a certain qualifier and type from the context.
@@ -103,6 +167,15 @@ public interface Context {
      */
     @Nonnull
     <T> Optional<T> get(@Nonnull Class<T> type, @Nonnull String qualifier);
+
+    /**
+     * Retrieves the generated default qualifier for a certain type.
+     *
+     * @param type a type.
+     * @return a qualifier.
+     */
+    @Nonnull
+    String getDefaultQualifier(@Nonnull Class<?> type);
 
     /**
      * Retrieves the parent context which will be used to resolve instances when values cannot be
@@ -121,7 +194,20 @@ public interface Context {
      * optional.
      */
     @Nonnull
-    <T> Optional<Provider<T>> getProvider(@Nonnull Class<T> type);
+    default <C> Optional<Provider<C>> getProvider(@Nonnull Class<C> type) {
+        return this.getProvider(type, this.getDefaultQualifier(type));
+    }
+
+    /**
+     * Retrieves the provider (a factory for) the specified type and qualifier.
+     *
+     * @param type      a type.
+     * @param qualifier a qualifier.
+     * @return a provider implementation or, if no such provider could be located, an empty
+     * optional.
+     */
+    @Nonnull
+    <C> Optional<Provider<C>> getProvider(@Nonnull Class<C> type, @Nonnull String qualifier);
 
     /**
      * Checks whether this context or one of its parents contains an instance of a specific
@@ -134,7 +220,7 @@ public interface Context {
      * capable of constructing an instance.
      */
     default boolean hasInstance(@Nonnull Class<?> type) {
-        return this.hasLocalInstance(type) || this.getParent().map((c) -> c.hasInstance(type)).orElse(false);
+        return this.hasInstance(type, this.getDefaultQualifier(type));
     }
 
     /**
@@ -161,7 +247,9 @@ public interface Context {
      * @see #canProduceInstanceLocally(Class) for verifying whether this context is capable of
      * constructing an instance.
      */
-    boolean hasLocalInstance(@Nonnull Class<?> type);
+    default boolean hasLocalInstance(@Nonnull Class<?> type) {
+        return this.hasLocalInstance(type, this.getDefaultQualifier(type));
+    }
 
     /**
      * Checks whether this context contains an instance of a specific component type and qualifier.
@@ -184,10 +272,7 @@ public interface Context {
     void inject(@Nonnull Object object);
 
     /**
-     * Removes a specific component instance from the context.
-     *
-     * <strong>Warning:</strong> This will remove all instances of a certain type and is not limited
-     * to one.
+     * Removes all component instances of a specific type from the context.
      *
      * <strong>Note:</strong> This will not account for non-singleton instances since they are not
      * actively stored in the context. These objects can be safely discarded by removing all strong
@@ -195,10 +280,27 @@ public interface Context {
      *
      * @param type an instance type.
      */
-    void removeInstance(@Nonnull Class<?> type);
+    void removeAllInstances(@Nonnull Class<?> type);
+
+    /**
+     * Removes a specific component instance from the context.
+     *
+     * <strong>Note:</strong> This will not account for non-singleton instances since they are not
+     * actively stored in the context. These objects can be safely discarded by removing all strong
+     * references to their instance.
+     *
+     * @param type an instance type.
+     */
+    default void removeInstance(@Nonnull Class<?> type) {
+        this.removeInstance(type, this.getDefaultQualifier(type));
+    }
 
     /**
      * Removes all instances of a certain type that match the supplied filter function.
+     *
+     * <strong>Note:</strong> This will not account for non-singleton instances since they are not
+     * actively stored in the context. These objects can be safely discarded by removing all strong
+     * references to their instance.
      *
      * @param type            a type.
      * @param filterPredicate a filter which accepts an instance.
@@ -207,6 +309,10 @@ public interface Context {
 
     /**
      * Removes all instance of a certain type that match the supplied filter function.
+     *
+     * <strong>Note:</strong> This will not account for non-singleton instances since they are not
+     * actively stored in the context. These objects can be safely discarded by removing all strong
+     * references to their instance.
      *
      * @param type            a type.
      * @param filterPredicate a filter predicate which accepts the qualifier and instance.
