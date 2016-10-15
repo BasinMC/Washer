@@ -9,20 +9,21 @@ import javax.annotation.concurrent.ThreadSafe;
 import javax.inject.Provider;
 
 /**
- * Represents a context consisting of one or more instances and their respective life cycles.
- *
+ * Represents a context consisting of one or more instances and their respective life cycles.<br>
+ * <br>
  * Generally all context implementations are expected to prioritize their local context over any
- * parent instances that may exist. The process of resolving an instance or provider is thus:
- *
+ * parent instances that may exist. The process of resolving an instance or provider is thus:<br>
+ * <br>
+ * <pre>
  * Local Context -&gt; Parent Context -&gt; Parent Parent Context -&gt; ...
+ * </pre>
  *
  * In some special cases, implementations may also choose to expose values from other context
  * instances to their children. In these cases the resolving process may branch. Implementations
  * should still prefer their own cases over their known children in these cases, however, to ensure
- * consistency:
- *
+ * consistency:<br>
+ * <br>
  * <pre>
- *
  *      _____ Root Context ____
  *    /            |            \
  *    |            |            |
@@ -33,8 +34,8 @@ import javax.inject.Provider;
  *
  * All implementations of this interface are expected to be <strong>thread safe</strong>. This is
  * due to the nature of dependency injection. Applications <strong>will</strong> always require some
- * form of threading and thus injection shall not be affected by thread safety concerns.
- *
+ * form of threading and thus injection shall not be affected by thread safety concerns.<br>
+ * <br>
  * This shifts the concern of thread safety to the objects which are accessed concurrently.
  *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
