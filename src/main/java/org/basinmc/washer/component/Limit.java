@@ -40,7 +40,8 @@ public @interface Limit {
      *
      * @return A class object of the component's type.
      */
-    @Nonnull Class<?> value();
+    @Nonnull
+    Class<?> value();
 
     /**
      * The number of times per instance of the dependency component which
@@ -48,7 +49,8 @@ public @interface Limit {
      *
      * @return A non-negative integer
      */
-    @Nonnegative int limit() default 1;
+    @Nonnegative
+    int limit() default 1;
 
     /**
      * Determines whether the given limit applies per each thread separately or
