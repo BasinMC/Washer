@@ -15,18 +15,21 @@
  */
 package org.basinmc.washer.component;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Allows the given component dependency to be initialized lazily. This
- * means that the component will be initialized when all non-lazy dependencies
- * are met. As dependencies are determined, they will be progressively
- * injected. The value that annotated dependencies are initialized to is
- * null.
+ * Allows the given component dependency to be initialized lazily.
+ *
+ * This means that the component will be initialized when all non-lazy dependencies are met. As
+ * dependencies are determined, they will be progressively injected.
+ *
+ * The value that annotated dependencies are initialized to is null.
  */
+@Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER})
 public @interface Lazy {

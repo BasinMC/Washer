@@ -15,6 +15,7 @@
  */
 package org.basinmc.washer.component;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -22,10 +23,14 @@ import java.lang.annotation.Target;
 
 /**
  * Assumes that all fields inside the annotated class are to be the
- * target of dependency injection. This has no effect on other annotations
- * such as {@link javax.inject.Named}.
+ * target of dependency injection.
+ *
+ * This has no effect on other annotations such as {@link javax.inject.Named}.
+ *
+ * @see javax.inject.Inject in order to inject values into all parameters of a constructor.
  */
+@Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE})
 public @interface InjectByDefault {
 }

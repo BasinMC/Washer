@@ -15,6 +15,7 @@
  */
 package org.basinmc.washer.component;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,13 +28,16 @@ import javax.annotation.Nonnull;
  * Limits the number of available instances of a component based on another
  * component.
  */
+@Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Limit {
+
     /**
      * The component to which this limit is relative. If the targeted component
      * itself is chosen, then the limit provided by {@link #limit()} will be
      * absolute.
+     *
      * @return A class object of the component's type.
      */
     @Nonnull Class<?> value();
@@ -41,6 +45,7 @@ public @interface Limit {
     /**
      * The number of times per instance of the dependency component which
      * this component can be initialized. Defaults to 1.
+     *
      * @return A non-negative integer
      */
     @Nonnegative int limit() default 1;
@@ -48,6 +53,7 @@ public @interface Limit {
     /**
      * Determines whether the given limit applies per each thread separately or
      * on a global application level.
+     *
      * @return True if the limit is per each thread, otherwise false.
      */
     boolean threadLocal() default false;
