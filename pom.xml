@@ -201,8 +201,7 @@
 
                         <configuration>
                             <keyname>A0360AC7</keyname>
-                        </configuration><groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
