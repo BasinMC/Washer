@@ -415,7 +415,7 @@ public interface Context {
      * @param instance an instance.
      */
     default void setInstance(@Nonnull Object instance) {
-        this.setInstance(instance.getClass(), instance);
+        this.setInstance((Class) instance.getClass(), instance);
     }
 
     /**
@@ -425,7 +425,7 @@ public interface Context {
      * @param instance  an instance.
      */
     default void setInstance(@Nonnull String qualifier, @Nonnull Object instance) {
-        this.setInstance(instance.getClass(), qualifier, instance);
+        this.setInstance((Class) instance.getClass(), qualifier, instance);
     }
 
     /**
