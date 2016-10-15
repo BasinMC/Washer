@@ -14,8 +14,23 @@ import javax.inject.Provider;
  *
  * Local Context -&gt; Parent Context -&gt; Parent Parent Context -&gt; ...
  *
- * In addition all implementations of this interface are expected to be <strong>thread safe</strong>
- * due to the nature of dependency injection.
+ * In some special cases, implementations may also choose to expose values from other context
+ * instances to their children. In these cases the resolving process may branch. Implementations
+ * should still prefer their own cases over their known children in these cases, however, to ensure
+ * consistency:
+ *
+ *      _____ Root Context ____
+ *    /            |           \
+ *    |            |           |
+ * Child A      Child B     Child C
+ *
+ * <h2>Thread Safety</h2>
+ *
+ * All implementations of this interface are expected to be <strong>thread safe</strong>. This is
+ * due to the nature of dependency injection. Applications <strong>will</strong> always require some
+ * form of threading and thus injection shall not be affected by thread safety concerns.
+ *
+ * This shifts the concern of thread safety to the objects which are accessed concurrently.
  *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
