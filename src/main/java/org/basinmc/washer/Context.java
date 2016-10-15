@@ -60,6 +60,26 @@ public interface Context {
      */
     <C> void bind(@Nonnull Class<? super C> base, @Nonnull String qualifier, @Nonnull Class<C> binding);
 
+
+    /**
+     * Binds a type to a specific provider implementation using the default generated qualifier.
+     *
+     * @param base            a base type.
+     * @param providerBinding a provider implementation type to bind to.
+     */
+    default <C> void bindProvider(@Nonnull Class<? super C> base, @Nonnull Class<Provider<C>> providerBinding) {
+        this.bindProvider(base, this.getDefaultQualifier(base), providerBinding);
+    }
+
+    /**
+     * Binds a type and qualifier to a specific provider implementation.
+     *
+     * @param base            a base type.
+     * @param qualifier       a qualifier.
+     * @param providerBinding a provider implementation type to bind to.
+     */
+    <C> void bindProvider(@Nonnull Class<? super C> base, @Nonnull String qualifier, @Nonnull Class<Provider<C>> providerBinding);
+
     /**
      * Checks whether the context or one of its parents can produce an instance of a certain type
      * (either through a provider or by invoking its constructor).
@@ -146,6 +166,24 @@ public interface Context {
      * @param qualifier a qualifier.
      */
     void clearBinding(@Nonnull Class<?> base, @Nonnull String qualifier);
+
+    /**
+     * Clears all provider bindings which match the specified filter predicate.
+     *
+     * @param base            a base type.
+     * @param filterPredicate a filter predicate which accepts a bound provider implementation
+     *                        type.
+     */
+    <C> void clearProviderBinding(@Nonnull Class<C> base, @Nonnull Predicate<Class<Provider<? extends C>>> filterPredicate);
+
+    /**
+     * Clears all provider bindings which match the specified filter predicate.
+     *
+     * @param base            a base type.
+     * @param filterPredicate a filter predicate which accepts a qualifier and bound provider
+     *                        implementation type.
+     */
+    <C> void clearProviderBinding(@Nonnull Class<C> base, @Nonnull BiPredicate<String, Class<Provider<? extends C>>> filterPredicate);
 
     /**
      * Retrieves an instance of a certain type from the context.
