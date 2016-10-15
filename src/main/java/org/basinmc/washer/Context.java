@@ -389,4 +389,42 @@ public interface Context {
      * @param instance an instance.
      */
     <C> void removeInstance(@Nonnull Class<? super C> type, @Nonnull C instance);
+
+    /**
+     * Stores an instance in the context using its core type and the default qualifier.
+     *
+     * @param instance an instance.
+     */
+    default void setInstance(@Nonnull Object instance) {
+        this.setInstance(instance.getClass(), instance);
+    }
+
+    /**
+     * Stores an instance using a specified qualifier and its core type.
+     *
+     * @param qualifier a qualifier.
+     * @param instance  an instance.
+     */
+    default void setInstance(@Nonnull String qualifier, @Nonnull Object instance) {
+        this.setInstance(instance.getClass(), qualifier, instance);
+    }
+
+    /**
+     * Stores an instance using a specified base type and a generated default qualifier.
+     *
+     * @param base     a base type such as an abstract class or interface.
+     * @param instance an instance.
+     */
+    default <C> void setInstance(@Nonnull Class<? super C> base, @Nonnull Object instance) {
+        this.setInstance(base, this.getDefaultQualifier(base), instance);
+    }
+
+    /**
+     * Stores an instance using a specified base type and qualifier.
+     *
+     * @param base      a base type such as an abstract class or interface.
+     * @param qualifier a qualifier.
+     * @param instance  an instance.
+     */
+    <C> void setInstance(@Nonnull Class<? super C> base, @Nonnull String qualifier, @Nonnull Object instance);
 }
