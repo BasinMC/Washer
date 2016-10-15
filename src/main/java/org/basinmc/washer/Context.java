@@ -1,6 +1,8 @@
 package org.basinmc.washer;
 
 import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
@@ -194,6 +196,22 @@ public interface Context {
      * @param type an instance type.
      */
     void removeInstance(@Nonnull Class<?> type);
+
+    /**
+     * Removes all instances of a certain type that match the supplied filter function.
+     *
+     * @param type            a type.
+     * @param filterPredicate a filter which accepts an instance.
+     */
+    <C> void removeInstance(@Nonnull Class<C> type, @Nonnull Predicate<C> filterPredicate);
+
+    /**
+     * Removes all instance of a certain type that match the supplied filter function.
+     *
+     * @param type            a type.
+     * @param filterPredicate a filter predicate which accepts the qualifier and instance.
+     */
+    <C> void removeInstance(@Nonnull Class<C> type, @Nonnull BiPredicate<String, C> filterPredicate);
 
     /**
      * Removes a specific component instance with a certain qualifier from the context.
