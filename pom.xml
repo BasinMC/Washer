@@ -174,7 +174,7 @@
 
                 <configuration>
                     <links>
-                        <link>http://docs.oracle.com/javaee/6/api/</link>
+                        <link>https://docs.oracle.com/javaee/6/api/</link>
                         <!-- FIXME: Add JavaDoc for javax.annotation since JSR 305 is not part of Oracle's documentation -->
                     </links>
                 </configuration>
