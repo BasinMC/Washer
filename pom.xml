@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 Hex <hex@hex.lc>
+  ~ and other copyright owners as documented in the project's IP log.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ 	http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Artifact Information -->
+    <groupId>org.basinmc</groupId>
+    <artifactId>washer</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>Basin</name>
+        <url>https://www.basinmc.org/</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Johannes Donath</name>
+            <timezone>Europe/Berlin</timezone>
+            <email>johannesd@torchmind.com</email>
+            <url>https://www.johannes-donath.com</url>
+
+            <organization>Torchmind</organization>
+            <organizationUrl>https://www.torchmind.com</organizationUrl>
+        </developer>
+
+        <developer>
+            <name>Hex</name>
+            <timezone>Americas/Denver</timezone>
+            <email>hex@hex.lc</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <tag>master</tag>
+        <url>https://github.com/BasinMC/Washer</url>
+        <connection>scm:git:git@github.com:/BasinMC/Washer.git</connection>
+        <developerConnection>scm:git:git@github.com:/BasinMC/Washer.git</developerConnection>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/BasinMC/Washer/issues</url>
+    </issueManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>basinmc</id>
+            <name>BasinMC Stable</name>
+            <url>https://www.basinmc.org/nexus/repository/maven-releases/</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>basinmc</id>
+            <name>BasinMC Snapshot</name>
+            <url>https://www.basinmc.org/nexus/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Code Quality -->
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>3.0.1</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Unit Test -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- Build Settings -->
+    <build>
+        <finalName>${project.groupId}.${project.artifactId}-${project.version}</finalName>
+        <defaultGoal>clean install</defaultGoal>
+
+        <pluginManagement>
+            <plugins>
+                <!-- Java Compiler -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.5</version>
+
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+
+                <!-- Jar Creation -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.6</version>
+
+                    <configuration>
+                        <archive>
+                            <addMavenDescriptor>true</addMavenDescriptor>
+                            <compress>true</compress>
+                            <index>true</index>
+                        </archive>
+                    </configuration>
+                </plugin>
+
+                <!-- Attach Sources -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.4</version>
+
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- Attach JavaDoc -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.3</version>
+
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- GPG Signatures -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.5</version>
+
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+
+                    <configuration>
+                        <keyname>A0360AC7</keyname>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <!-- Deployment Profiles -->
+    <profiles>
+        <profile>
+            <id>deployment</id>
+
+            <build>
+                <plugins>
+                    <!-- GPG Signatures -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
