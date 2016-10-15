@@ -136,6 +136,11 @@ public interface Context {
     void clear();
 
     /**
+     * Clears all introduced bindings.
+     */
+    void clearAllBindings();
+
+    /**
      * Clears all bindings for a certain base type.
      *
      * @param base a base type such as an abstract class or interface.
