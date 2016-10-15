@@ -127,6 +127,15 @@ public interface Context {
     boolean canProduceInstanceLocally(@Nonnull Class<?> type, @Nonnull String qualifier);
 
     /**
+     * Evicts all stored instances in this context.
+     *
+     * <strong>Note:</strong> It is strongly encouraged to call this method before discarding a
+     * context reference in order to ensure that parent contexts are notified of object destructions
+     * accordingly.
+     */
+    void clear();
+
+    /**
      * Clears all bindings for a certain base type.
      *
      * @param base a base type such as an abstract class or interface.
