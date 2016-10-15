@@ -19,10 +19,12 @@ import javax.inject.Provider;
  * should still prefer their own cases over their known children in these cases, however, to ensure
  * consistency:
  *
- *      _____ Root Context ____
- *    /            |           \
- *    |            |           |
+ * <pre>
+ *   _____ Root Context ____
+ * /            |           \
+ * |            |           |
  * Child A      Child B     Child C
+ * </pre>
  *
  * <h2>Thread Safety</h2>
  *
@@ -178,4 +180,51 @@ public interface Context {
      * @param object an object.
      */
     void inject(@Nonnull Object object);
+
+    /**
+     * Removes a specific component instance from the context.
+     *
+     * <strong>Warning:</strong> This will remove all instances of a certain type and is not limited
+     * to one.
+     *
+     * <strong>Note:</strong> This will not account for non-singleton instances since they are not
+     * actively stored in the context. These objects can be safely discarded by removing all strong
+     * references to their instance.
+     *
+     * @param type an instance type.
+     */
+    void removeInstance(@Nonnull Class<?> type);
+
+    /**
+     * Removes a specific component instance with a certain qualifier from the context.
+     *
+     * <strong>Note:</strong> This will not account for non-singleton instances since they are not
+     * actively stored in the context. These objects can be safely discarded by removing all strong
+     * references to their instance.
+     *
+     * @param type      an instance type.
+     * @param qualifier an instance qualifier.
+     */
+    void removeInstance(@Nonnull Class<?> type, @Nonnull String qualifier);
+
+    /**
+     * Removes an instance of a certain type from the context.
+     *
+     * @param instance an instance.
+     * @see #removeInstance(Class, Object) to remove instances of interfaces which have been
+     * introduced by a {@link Provider} implementation or using {@link
+     * org.basinmc.washer.component.ProvidedBy}.
+     */
+    @SuppressWarnings("unchecked")
+    default void removeInstance(@Nonnull Object instance) {
+        this.removeInstance((Class) instance.getClass(), instance);
+    }
+
+    /**
+     * Removes an instance of a certain type from the context.
+     *
+     * @param type     a type.
+     * @param instance an instance.
+     */
+    <C> void removeInstance(@Nonnull Class<? super C> type, @Nonnull C instance);
 }
