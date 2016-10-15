@@ -324,6 +324,11 @@ public interface Context {
     void inject(@Nonnull Object object);
 
     /**
+     * Considers all objects for eviction based on their registered lifecycle.
+     */
+    void refresh();
+
+    /**
      * Removes all component instances of a specific type from the context.
      *
      * <strong>Note:</strong> This will not account for non-singleton instances since they are not
