@@ -22,6 +22,7 @@ import javax.inject.Provider;
  * consistency:
  *
  * <pre>
+ *
  *      _____ Root Context ____
  *    /            |            \
  *    |            |            |
