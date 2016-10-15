@@ -23,9 +23,9 @@ import javax.inject.Provider;
  *
  * <pre>
  *      _____ Root Context ____
- *    /            |           \
- *    |            |           |
- * Child A      Child B     Child C
+ *    /            |            \
+ *    |            |            |
+ * Child A      Child B      Child C
  * </pre>
  *
  * <h2>Thread Safety</h2>
