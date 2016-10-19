@@ -16,6 +16,8 @@
  */
 package org.basinmc.washer.component;
 
+import org.basinmc.washer.annotation.ComponentType;
+
 import java.lang.annotation.Annotation;
 
 import javax.annotation.Nonnull;

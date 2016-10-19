@@ -16,6 +16,8 @@
  */
 package org.basinmc.washer;
 
+import org.basinmc.washer.annotation.ProvidedBy;
+
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -410,7 +412,7 @@ public interface Context {
      * @param instance an instance.
      * @see #removeInstance(Class, Object) to remove instances of interfaces which have been
      * introduced by a {@link Provider} implementation or using {@link
-     * org.basinmc.washer.component.ProvidedBy}.
+     * ProvidedBy}.
      */
     @SuppressWarnings("unchecked")
     default void removeInstance(@Nonnull Object instance) {

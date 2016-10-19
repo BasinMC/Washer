@@ -14,7 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.basinmc.washer.component;
+package org.basinmc.washer.annotation;
+
+import org.basinmc.washer.component.ComponentTypeScanner;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -25,20 +27,33 @@ import java.lang.annotation.Target;
 import javax.annotation.Nonnull;
 
 /**
- * Declares the type which provides the implementation for the annotated interface.
+ * Marks the annotation this annotation is applied to as a component type annotation.
+ *
+ * This annotation allows scanners to be implemented in order to specially handle initialized
+ * instances of annotated components and possibly register them with a management component of
+ * sorts.
  *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 @Documented
-@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ProvidedBy {
+@Target({ElementType.ANNOTATION_TYPE})
+public @interface ComponentType {
 
     /**
-     * Declares the implementation type.
+     * Defines the scanner which is in charge of handling the discovery, construction and
+     * destruction of instances within this component type.
      *
-     * @return a type.
+     * @return a scanner implementation.
      */
     @Nonnull
-    Class<?> value();
+    Class<? extends ComponentTypeScanner> scanner();
+
+    /**
+     * Defines the type a component has to implement in order to be considered valid.
+     *
+     * @return a component type.
+     */
+    @Nonnull
+    Class<?> type() default Object.class;
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.basinmc.washer.component;
+package org.basinmc.washer.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
