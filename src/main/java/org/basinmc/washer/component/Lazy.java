@@ -44,7 +44,7 @@ public interface Lazy<C> {
      */
     @Nonnull
     default Optional<C> get() {
-        return isInitialized() ? Optional.of(getInstance()) : Optional.empty();
+        return this.isInitialized() ? Optional.of(this.getInstance()) : Optional.empty();
     }
 
     /**
