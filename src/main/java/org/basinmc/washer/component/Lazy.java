@@ -16,6 +16,8 @@
  */
 package org.basinmc.washer.component;
 
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -34,6 +36,16 @@ public interface Lazy<C> {
      */
     @Nonnull
     C getInstance();
+
+    /**
+     * Gets the wrapped object if it is initialized, otherwise returns an empty Optional.
+     *
+     * @return an Optional wrapping the component instance
+     */
+    @Nonnull
+    default Optional<C> get() {
+        return isInitialized() ? Optional.of(getInstance()) : Optional.empty();
+    }
 
     /**
      * Checks whether the component instance in question has already been initialized (either by
