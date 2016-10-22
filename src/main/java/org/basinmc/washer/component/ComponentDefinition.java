@@ -75,6 +75,12 @@ public interface ComponentDefinition<C> {
     Optional<Class<? extends Provider<C>>> getProviderType();
 
     /**
+     * Retrieves the qualifier bound to this definition.
+     */
+    @Nonnull
+    String getQualifier();
+
+    /**
      * Checks whether the definition matches its constraints.
      *
      * @return true if matches, false otherwise.
